@@ -13,5 +13,8 @@ target 'Plants' do
   pod 'RealmSwift'
   pod 'RxRealm'
   pod 'LGSideMenuController'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Database'
 
 end

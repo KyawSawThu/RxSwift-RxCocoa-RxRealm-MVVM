@@ -12,4 +12,10 @@ class Tip: Codable {
     var temperature: String
     var light: String
     var placement: String
+    
+    init(){
+        self.temperature = ""
+        self.light = ""
+        self.placement = ""
+    }
 }

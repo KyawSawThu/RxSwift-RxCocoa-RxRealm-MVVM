@@ -7,27 +7,40 @@
 //
 
 import UIKit
+import LGSideMenuController
 import RealmSwift
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    func switchControllers(viewToDismiss: UIViewController, viewToPresent: UIViewController) {
-        if viewToDismiss.isViewLoaded && (viewToDismiss.view.window != nil) {
-            viewToDismiss.dismiss(animated: false, completion: {
-                self.window?.rootViewController?.present(viewToPresent, animated: true, completion: nil)
-            })
-        } else {
-            print("Else")
-        }
-    }
+//    func switchRootViewController() {
+//        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+//        let sideMenu = storyboard.instantiateViewController(withIdentifier: "LGSideMenuController") as! LGSideMenuController
+//        self.window?.rootViewController = sideMenu
+//        self.window?.makeKeyAndVisible()
+//    }
+//
+//    func switchBack() {
+//        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+//        let nav = storyboard.instantiateViewController(withIdentifier: "LogInViewController")
+//        self.window?.makeKeyAndVisible()
+//        self.window?.rootViewController = nav
+//    }
+    
+
+//    func navigateToHome() {
+//        let sb = UIStoryboard(name: "Main", bundle: nil)
+//        let vc = sb.instantiateViewController(withIdentifier: "LGSideMenuController") as! LGSideMenuController
+//        self.window?.makeKeyAndVisible()
+//        self.window?.rootViewController = vc
+//    }
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-//        print(Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? "")
+        FirebaseApp.configure()
         return true
     }
 

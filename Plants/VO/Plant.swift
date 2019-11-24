@@ -16,5 +16,4 @@ class Plant: Codable{
     var tips: Tip
     var uploadedUser: User
     var plantPhoto: String
-    
 }

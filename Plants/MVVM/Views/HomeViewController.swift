@@ -12,7 +12,9 @@ import RxSwift
 import RxCocoa
 
 class HomeViewController: UIViewController {
-
+    
+    static let identifier = "HomeViewController"
+    
     @IBOutlet weak var ivTitleBar: UIImageView!
     @IBOutlet weak var plantTableView: UITableView!
     
@@ -22,6 +24,11 @@ class HomeViewController: UIViewController {
     
     var activityView = UIActivityIndicatorView(style: .large)
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        plantTableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initDataObservation()
@@ -30,14 +37,13 @@ class HomeViewController: UIViewController {
     }
     
     fileprivate func setUpUI(){
-        
         ivTitleBar.roundCorners(tLeft: 35, tRight: 35, bLeft: 35, bRight: 5)
         
         self.view.backgroundColor = .accent
         
         activityView.center = self.view.center
         self.view.addSubview(activityView)
-        activityView.startAnimating()
+        
     }
     
     fileprivate func initTableView() {
@@ -47,8 +53,9 @@ class HomeViewController: UIViewController {
         plantTableView.backgroundView = .none
         
         plantTableView.registerWithCell(nibName: String(describing: PlantTableViewCell.self))
-        
+    
         plantTableView.dataSource = self
+        plantTableView.delegate = self
     }
     
     fileprivate func initDataObservation() {
@@ -62,9 +69,10 @@ class HomeViewController: UIViewController {
         mViewModel
             .isLoadingObs
             .observeOn(MainScheduler.instance)
-            .map{!$0}
-            .bind(to: self.activityView.rx.isHidden)
+            .map{$0}
+            .bind(to: self.activityView.rx.isAnimating)
             .disposed(by: disposeBag)
+        
     }
     
     fileprivate func bindData(plants: [Plant]) {
@@ -72,13 +80,13 @@ class HomeViewController: UIViewController {
         plantTableView.reloadData()
     }
     
-    @IBAction func onClickMenuButton(_ sender: Any) {
-        let vc = (UIApplication.shared.windows.first?.rootViewController) as! LGSideMenuController
-        vc.showLeftViewAnimated()
-    }
+//    @IBAction func onClickMenuButton(_ sender: Any) {
+//        let vc = (UIApplication.shared.windows.first!.rootViewController) as! LGSideMenuController
+//        vc.showLeftViewAnimated()
+//    }
     
 }
-    
+
 
 
 extension HomeViewController: UITableViewDataSource {
@@ -92,5 +100,49 @@ extension HomeViewController: UITableViewDataSource {
         return cell
     }
     
-    
 }
+
+extension HomeViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let vc = sb.instantiateViewController(withIdentifier: DetailViewController.identifier) as! DetailViewController
+        vc.mData = self.mPlants[indexPath.row]
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
+    }
+}
+
+//        RxCocoa Binding Process
+
+//        mViewModel
+//            .plants
+//            .observeOn(MainScheduler.instance)
+//            .bind(to: plantTableView.rx.items) { tableView, index, item in
+//                let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: PlantTableViewCell.self), for: IndexPath(row: index, section: 0)) as! PlantTableViewCell
+//                cell.mPlant = item
+//                return cell
+//            }
+//            .disposed(by: disposeBag)
+
+//        Observable
+//            .zip(plantTableView.rx.itemSelected, plantTableView.rx.modelSelected(Plant.self))
+//            .bind{ index, model in
+//                print(model.uploadedUser.name)
+//                let sb = UIStoryboard(name: "Main", bundle: nil)
+//                let vc = sb.instantiateViewController(withIdentifier: DetailViewController.identifier) as! DetailViewController
+//                vc.mData = model
+//                vc.modalPresentationStyle = .fullScreen
+//                self.present(vc, animated: true, completion: nil)
+//            }
+//            .disposed(by: disposeBag)
+
+//plantTableView
+//            .rx
+//            .modelSelected(Plant.self).bind{ model in
+//                let sb = UIStoryboard(name: "Main", bundle: nil)
+//                let vc = sb.instantiateViewController(withIdentifier: DetailViewController.identifier) as! DetailViewController
+//                vc.mData = model
+//                vc.modalPresentationStyle = .fullScreen
+//                self.present(vc, animated: true, completion: nil)
+//            }
+//            .disposed(by: disposeBag)

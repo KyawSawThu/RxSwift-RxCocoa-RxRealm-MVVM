@@ -21,5 +21,10 @@ extension UIImageView {
             ]
         )
     }
+    
+    func roundCorner() {
+        self.layer.cornerRadius = self.frame.height / 2
+    }
+    
 }
 

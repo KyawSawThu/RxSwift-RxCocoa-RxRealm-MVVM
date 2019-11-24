@@ -11,6 +11,7 @@ import RxRealm
 import Realm
 import RealmSwift
 import RxSwift
+import RxRelay
 
 class RealmHelper {
     

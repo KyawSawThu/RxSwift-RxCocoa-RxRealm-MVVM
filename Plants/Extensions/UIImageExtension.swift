@@ -15,11 +15,23 @@ extension UIImage{
     }
     
     static var setFavorite: UIImage {
-        return UIImage(named: "heart_filled_icon")!
+        return UIImage(named: "fav_filled_icon")!
     }
     
     static var unSetFavorite: UIImage {
-        return UIImage(named: "heart_icon")!
+        return UIImage(named: "fav_icon")!
+    }
+    
+    static var Temperature: UIImage {
+        return UIImage(named: "temperature_icon")!
+    }
+    
+    static var Light: UIImage {
+        return UIImage(named: "light_icon")!
+    }
+    
+    static var Placement: UIImage {
+        return UIImage(named: "placement_icon")!
     }
     
 }

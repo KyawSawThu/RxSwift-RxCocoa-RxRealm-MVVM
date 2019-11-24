@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>137122696321-45nhiqsvu9pbfccs7r24a998ahr4vhlp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.137122696321-45nhiqsvu9pbfccs7r24a998ahr4vhlp</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDxhw1PNvAL4Vv5LxqyaeRn1cM94X6sHxo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>137122696321</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.kyawsawthu.Plants</string>
+	<key>PROJECT_ID</key>
+	<string>selfemployed-3cfcf</string>
+	<key>STORAGE_BUCKET</key>
+	<string>selfemployed-3cfcf.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:137122696321:ios:58d7eba7b6a93151f19180</string>
+	<key>DATABASE_URL</key>
+	<string>https://selfemployed-3cfcf.firebaseio.com</string>
+</dict>
+</plist>

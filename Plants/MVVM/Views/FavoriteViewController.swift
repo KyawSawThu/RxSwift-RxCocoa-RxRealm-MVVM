@@ -8,14 +8,17 @@
 
 import UIKit
 import RxSwift
+import FirebaseAuth
 
 class FavoriteViewController: UIViewController {
 
     @IBOutlet weak var favoriteCollectionView: UICollectionView!
     
     private let mViewModel: FavoriteViewModel = FavoriteViewModel()
+    private let homeViewModel: HomeViewModel = HomeViewModel()
     private let disposeBag: DisposeBag = DisposeBag()
-    var mPlants: [FavoritePlant] = [FavoritePlant]()
+    
+    var mPlants: [Plant] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +26,12 @@ class FavoriteViewController: UIViewController {
         initDataObservation()
         
     }
+    
+    @IBAction func onClickSignOut(_ sender: Any) {
+        try! Auth.auth().signOut()
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     
     fileprivate func initDataObservation() {
         mViewModel
@@ -34,37 +43,43 @@ class FavoriteViewController: UIViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+        
+        homeViewModel
+            .plants
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { data in
+                self.bindData(data: data)
+            })
+            .disposed(by: disposeBag)
+        
+        favoriteCollectionView
+            .rx
+            .modelSelected(FavoritePlant.self)
+            .bind { model in
+                let sb = UIStoryboard(name: "Main", bundle: nil)
+                let vc = sb.instantiateViewController(withIdentifier: DetailViewController.identifier) as! DetailViewController
+                vc.mData = self.filterData(fav: model)
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
+            }
+            .disposed(by: disposeBag)
 
     }
     
-    fileprivate func bindData(plants: [FavoritePlant]) {
-        mPlants = plants
-        favoriteCollectionView.reloadData()
+    fileprivate func bindData(data: [Plant]) {
+        mPlants = data
+    }
+    
+    fileprivate func filterData(fav: FavoritePlant)->Plant {
+        let plant = mPlants.filter{ $0.plantId == fav.plantId }
+        return plant.first!
     }
     
     fileprivate func initCollectionView() {
-        favoriteCollectionView.delegate = self
         favoriteCollectionView.backgroundColor = .clear
-        
-//        let cellScale = CGFloat(0.4)
-//        let viewWidth = self.view.frame.width
-//        let cellWidth = viewWidth * cellScale
-//        let cellHeight = viewWidth * cellScale
-        
         favoriteCollectionView.registerWithItem(nibName: String(describing: PlantCollectionViewCell.self))
+        favoriteCollectionView.setVerticalFlowLayout(parentViewSize: CGSize(width: 300, height: 800), cellPadding: 12, numberOfItemsPerRow: 2, showIndicator: false)
         
-//        let layout = favoriteCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-//        layout.scrollDirection = .vertical
-//        layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
-//        layout.minimumInteritemSpacing = 5
-//        layout.minimumInteritemSpacing = 10
     }
 
-}
-
-extension FavoriteViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 25)
-        return CGSize(width: 120, height: 120)
-    }
 }
